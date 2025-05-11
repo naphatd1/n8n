@@ -19,7 +19,7 @@ services:
     networks:
       - n8n_net
     volumes:
-      - /home/naphat/n8n:/home/node/.n8n
+      - /Users/naphat/Desktop/n8n/n8n:/home/node/.n8n
 
   ngrok:
     image: ngrok/ngrok:latest
