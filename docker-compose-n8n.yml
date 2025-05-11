@@ -1,0 +1,38 @@
+services:
+  n8n:
+    image: n8nio/n8n
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_DEFAULT_BINARY_DATA_MODE=filesystem
+      - N8N_AVAILABLE_BINARY_DATA_MODES=filesystem
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST="ip local"
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER="name"
+      - DB_POSTGRESDB_PASSWORD="password"
+      - DB_POSTGRESDB_SCHEMA=public
+      - GENERIC_TIMEZONE=Asia/Bangkok
+    networks:
+      - n8n_net
+    volumes:
+      - /home/naphat/n8n:/home/node/.n8n
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok
+    restart: always
+    command: http n8n:5678 --log=stdout
+    depends_on:
+      - n8n
+    environment:
+      - NGROK_AUTHTOKEN="Key Ngrok"
+    networks:
+      - n8n_net
+
+networks:
+  n8n_net:
+    driver: bridge
